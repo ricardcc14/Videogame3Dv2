@@ -146,6 +146,9 @@
     <None Include="red.vert">
       <Filter>Archivos de recursos\Shaders</Filter>
     </None>
+    <None Include="Meshes\dynamite_export.fbx">
+      <Filter>Archivos de recursos\Meshes</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">

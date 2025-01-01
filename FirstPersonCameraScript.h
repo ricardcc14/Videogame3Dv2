@@ -3,6 +3,7 @@
 #include "Script.h"
 //#include "TimerScript.h"
 #include "LightScript.h"
+#include "MazeSpawnerScript.h"
 
 using namespace std;
 
@@ -12,9 +13,10 @@ class FirstPersonCameraScript : public Script
     using Script::Script;
 
 public:
-    FirstPersonCameraScript(GLFWwindow* window, World* world, Entity* ent, LightScript* lightScript) : Script(window, world, ent)
+    FirstPersonCameraScript(GLFWwindow* window, World* world, Entity* ent, LightScript* lightScript, MazeSpawnerScript* mazeScript) : Script(window, world, ent)
     {
         this->lightScript = lightScript;
+        this->mazeScript = mazeScript;
     }
 
     void startScript() override;
@@ -32,6 +34,7 @@ private:
     Entity* objHolded = nullptr;
     float holdingZoom = 10.0f;
     LightScript* lightScript;
+    MazeSpawnerScript* mazeScript;
     
   
     //TimerScript timerScript;

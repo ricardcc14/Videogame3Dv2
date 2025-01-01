@@ -181,6 +181,9 @@
     <None Include="default.frag" />
     <None Include="default.vert" />
     <None Include="inverted.frag" />
+    <None Include="Meshes\dynamite_export.fbx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="red.frag" />
     <None Include="red.vert" />
     <None Include="repeating.frag" />

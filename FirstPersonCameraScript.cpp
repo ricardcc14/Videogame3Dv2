@@ -204,7 +204,8 @@ void FirstPersonCameraScript::tickScript(float deltaTime) {
 					}
 					else if (cube_tag->type == EntityType::light) {
 						lightScript->openLight();
-						cout << "openlights" << endl;
+						mazeScript->changeMaze();
+						//cout << "openlights" << endl;
 					}
 				});
 					rayPoint += rayDir * stepSize;

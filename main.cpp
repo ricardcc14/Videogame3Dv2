@@ -132,20 +132,38 @@ void SetupWorld() {
 
 	ScriptManager* scriptManager = scriptSystem->getScriptManager();
 
-
+	//Camera
 	Entity* ent = CreateCamera(glm::vec3(10.0f, 6.f, 10.0f));
+
+	//Lights
 	Entity* lightEnt = CreateEntity3DWithMesh(glm::vec3(20, 5, 20), 1, glm::vec3(0, 0, 0), "Meshes/cube.obj", "Textures/gameboy.png");
 	lightEnt->assign<CubeCollider>(2, 2, 2);
 	lightEnt->assign<Tag>(Tag{ EntityType::light });
 	LightScript* lightScript = new LightScript(window, world, lightEnt);
 	lightEnt->assign<ScriptComponent>(scriptManager->AddScript(lightScript));
 
-	FirstPersonCameraScript* fps = new FirstPersonCameraScript(window, world, ent, lightScript);
+	//Pool de walls + Maze
+	int nWalls = 400;
+	vector<Entity*> wallsPool;
+	for (int n = 0; n < nWalls; n++) {
+		Entity* wall = CreateEntity3DWithMesh(glm::vec3(0.f), 2, glm::vec3(0, 0, 0), "Meshes/my_wall.obj", "Textures/wall_texture_metal.png");
+		wall->assign<CubeCollider>(3.5, 22, 3.5);
+		wall->assign<Tag>(Tag{ EntityType::fixed });
+		wallsPool.push_back(wall);
+	}
+	MazeSpawnerScript* mazeSpawnerScript = new MazeSpawnerScript(window, world, wallsPool);
+	Entity* mazeManager = CreateEntity3DEmpty();
+	mazeManager->assign<ScriptComponent>(scriptManager->AddScript(mazeSpawnerScript));
+
+	//FPS Camera
+	FirstPersonCameraScript* fps = new FirstPersonCameraScript(window, world, ent, lightScript, mazeSpawnerScript);
 
 	ent->assign<ScriptComponent>(scriptManager->AddScript(fps));
 
 	rs->setCamera(ent);
 	//Entity* sprite = CreateEntity2D(glm::vec2(0., 0.), 0.f, 1.f, "Textures/science_dog.png", glm::vec3(1., 1., 1.), false, glm::vec2(5., 5.));
+	
+	
 	Entity* paddle_ent = CreateEntity2D(glm::vec2(100, 50), 0.f, 1.f, "Textures/button_yellow.png", glm::vec3(1., 1., 1.), true);
 	paddle_ent->get<Sprite>()->visible = false;
 	gameEntities2d.push_back(paddle_ent);
@@ -168,6 +186,13 @@ void SetupWorld() {
 	BlockScript* cube1_script = new BlockScript(window, world, cube1, 20.f);
 	cube1->assign<ScriptComponent>(scriptManager->AddScript(cube1_script));
 
+	//Dynamite
+	Entity* dynamite_ent = CreateEntity3DWithMesh(glm::vec3(25, 0, 25), 0.3, glm::vec3(0, 0, 0), "Meshes/dynamite.obj", "Textures/dynamite_basecolor.png");
+	dynamite_ent->assign<CubeCollider>(2, 2, 2);
+	dynamite_ent->assign<Tag>(Tag{ EntityType::mobile });
+
+
+
 	glm::vec3 direction = glm::vec3(0.0, 1.0, 10.0);
 
 
@@ -177,28 +202,17 @@ void SetupWorld() {
 	cout << eulerAngles.y << endl;
 	cout << eulerAngles.z << endl;
 	
-	//Pool de walls
-	int nWalls = 400;
-	list<Entity*> wallsPool;
-	for (int n = 0; n < nWalls; n++) {
-		Entity* wall = CreateEntity3DWithMesh(glm::vec3(0.f), 2, glm::vec3(0, 0, 0), "Meshes/my_wall.obj", "Textures/bricks_albedo.png", "Textures/bricks_normal.png");
-		wall->assign<CubeCollider>(3.5, 22, 3.5);
-		wall->assign<Tag>(Tag{ EntityType::fixed });
-		wallsPool.push_back(wall);
-	}
-	MazeSpawnerScript* mazeSpawnerScript = new MazeSpawnerScript (window, world, wallsPool);
-	Entity* mazeManager = CreateEntity3DEmpty();
-	mazeManager->assign<ScriptComponent>(scriptManager->AddScript(mazeSpawnerScript));
+	
 	
 	Entity* video_intro = CreateEntity2D(glm::vec2(960.f, 540.f), 0.f, 1.f, "Textures/videogame_intro/frame_0001.png", glm::vec3(0.f), false, glm::vec2(1920, 1080));
 	VideoPlayer* videoPlayer = new VideoPlayer(window, world, video_intro);
 	video_intro->assign<ScriptComponent>(scriptManager->AddScript(videoPlayer));
-	
-	Entity* timerEnt1 = CreateEntity2D(glm::vec2(900.f, 840.f), 0.f, 1.f, "Textures/7seg_0.png", glm::vec3(0.f), false, glm::vec2(45.f, 61.f));
-	Entity* timerEnt2 = CreateEntity2D(glm::vec2(940.f, 840.f), 0.f, 1.f, "Textures/7seg_0.png", glm::vec3(0.f), false, glm::vec2(45.f, 61.f));
-	Entity* timerEnt3 = CreateEntity2D(glm::vec2(980.f, 840.f), 0.f, 1.f, "Textures/7seg_0.png", glm::vec3(0.f), false, glm::vec2(45.f, 61.f));
-	Entity* timerEnt4 = CreateEntity2D(glm::vec2(1020.f, 840.f), 0.f, 1.f, "Textures/7seg_0.png", glm::vec3(0.f), false, glm::vec2(45.f, 61.f));
-	Entity* timerEnt = CreateEntity2D(glm::vec2(960.f, 840.f), 0.f, 1.f, "Textures/button_yellow.png", glm::vec3(0.f), false, glm::vec2(90.f, 122.f));
+	Entity* timerEnt = CreateEntity2D(glm::vec2(960.f, 840.f), 0.f, 1.f, "Textures/7seg_2p.png", glm::vec3(0.f), false, glm::vec2(17.f, 61.f));
+	Entity* timerEnt1 = CreateEntity2D(glm::vec2(890.f, 840.f), 0.f, 1.f, "Textures/7seg_0.png", glm::vec3(0.f), false, glm::vec2(45.f, 61.f));
+	Entity* timerEnt2 = CreateEntity2D(glm::vec2(930.f, 840.f), 0.f, 1.f, "Textures/7seg_0.png", glm::vec3(0.f), false, glm::vec2(45.f, 61.f));
+	Entity* timerEnt3 = CreateEntity2D(glm::vec2(990.f, 840.f), 0.f, 1.f, "Textures/7seg_0.png", glm::vec3(0.f), false, glm::vec2(45.f, 61.f));
+	Entity* timerEnt4 = CreateEntity2D(glm::vec2(1030.f, 840.f), 0.f, 1.f, "Textures/7seg_0.png", glm::vec3(0.f), false, glm::vec2(45.f, 61.f));
+	//Entity* timerEnt = CreateEntity2D(glm::vec2(960.f, 840.f), 0.f, 1.f, "Textures/button_yellow.png", glm::vec3(0.f), false, glm::vec2(90.f, 122.f));
 	Entity* timerEntities[4] = { timerEnt1, timerEnt2, timerEnt3, timerEnt4 };
 	TimerScript* timerScript = new TimerScript(window, world, timerEnt, timerEntities);
 	timerEnt->assign<ScriptComponent>(scriptManager->AddScript(timerScript));
