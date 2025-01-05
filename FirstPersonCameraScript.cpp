@@ -21,6 +21,18 @@ void FirstPersonCameraScript::tickScript(float deltaTime) {
 	glm::vec3 currentPosition = cam->position;
 	glm::vec3 desiredPosition = cam->position;
 
+	//Show position debug
+
+	static float timePos = 0.f;
+
+	timePos += deltaTime;
+
+	if (timePos >= 1000.f) {
+		cout << "Position player-> X: " << currentPosition.x << " , Z: " << currentPosition.z << endl;
+		timePos -= 1000.f;
+	} 
+
+
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		desiredPosition += speedDelta * cam->orientation;
@@ -185,7 +197,7 @@ void FirstPersonCameraScript::tickScript(float deltaTime) {
 					if (cube_tag && cube_tag->type == EntityType::fixed) {
 						return;
 					}
-					else if (cube_tag->type == EntityType::mobile) {
+					if (cube_tag->type == EntityType::mobile || cube_tag->type == EntityType::light) {
 						ComponentHandle<Transform3D> cube_transform = cube_ent->get<Transform3D>();
 
 						glm::vec3 cubeMinPos = cube_transform->position - glm::vec3(cube_collider->width, cube_collider->length, cube_collider->height) * 0.5f;
@@ -195,18 +207,21 @@ void FirstPersonCameraScript::tickScript(float deltaTime) {
 						if (rayPoint.x >= cubeMinPos.x && rayPoint.x <= cubeMaxPos.x &&
 							rayPoint.y >= cubeMinPos.y && rayPoint.y <= cubeMaxPos.y &&
 							rayPoint.z >= cubeMinPos.z && rayPoint.z <= cubeMaxPos.z) {
+							if (cube_tag->type == EntityType::mobile) {
+
 							holdingObj = true;
 							objHolded = cube_ent;
 							std::cout << "Collision detected at ray point: " << rayPoint.x << ", " << rayPoint.y << ", " << rayPoint.z << std::endl;
-							
+							}
+							if (cube_tag->type == EntityType::light) {
+								lightScript->openLight();
+								mazeScript->changeMaze();
+								//cout << "Br" << endl;
+							}
 							return;
 						}
 					}
-					else if (cube_tag->type == EntityType::light) {
-						lightScript->openLight();
-						mazeScript->changeMaze();
-						//cout << "openlights" << endl;
-					}
+					
 				});
 					rayPoint += rayDir * stepSize;
 					rayCurrentDist += stepSize;
@@ -287,6 +302,14 @@ void FirstPersonCameraScript::tickScript(float deltaTime) {
 
 			}
 
+	}
+
+	if (lightScript->brightness == 0.01f && currentPosition.x > 25.5 && currentPosition.x < 71) {
+		cam->position = initialPos;
+		lightScript->openLight();
+	}
+	if (currentPosition.x > 71) {
+		lightScript->openLight();
 	}
 	
 }

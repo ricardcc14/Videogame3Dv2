@@ -1,8 +1,7 @@
 #include "LightScript.h"
 #include <iostream>
 
-float accTime = 0.f;
-float brightness = 1.f;
+
 void LightScript::startScript() {
 
 }
@@ -14,7 +13,7 @@ void LightScript::tickScript(float deltaTime) {
 	if (reset) {
 		accTime = 0.0f;
 		brightness = 1.f;
-		//cout << "openlights2 Brigt:"<< brightness << endl;
+		
 		reset = false;
 	}
 	if (running) {
@@ -28,6 +27,7 @@ void LightScript::tickScript(float deltaTime) {
 			});
 
 	}
+	cout << "openlights2 Brigt:" << brightness << endl;
 }
 void LightScript::openLight() {
 	reset = true;

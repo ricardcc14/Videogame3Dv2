@@ -1,4 +1,5 @@
 #include "VideoPlayer.h"
+#include "AudioPlayer.h"
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -78,6 +79,8 @@ void VideoPlayer::tickScript(float deltaTime)
     }
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS){
         //entity->get<Sprite>()->visible = false;
+        AudioPlayer::Init();
+        AudioPlayer::PlayAudio("timebomb_loop.wav", true);
         world->destroy(entity);
     }
 }

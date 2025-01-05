@@ -136,7 +136,7 @@ void SetupWorld() {
 	Entity* ent = CreateCamera(glm::vec3(10.0f, 6.f, 10.0f));
 
 	//Lights
-	Entity* lightEnt = CreateEntity3DWithMesh(glm::vec3(20, 5, 20), 1, glm::vec3(0, 0, 0), "Meshes/cube.obj", "Textures/gameboy.png");
+	Entity* lightEnt = CreateEntity3DWithMesh(glm::vec3(1.8, 5, 20), 0.3, glm::vec3(0, 0, 0), "Meshes/cube.obj", "Textures/gameboy.png");
 	lightEnt->assign<CubeCollider>(2, 2, 2);
 	lightEnt->assign<Tag>(Tag{ EntityType::light });
 	LightScript* lightScript = new LightScript(window, world, lightEnt);
@@ -187,7 +187,7 @@ void SetupWorld() {
 	cube1->assign<ScriptComponent>(scriptManager->AddScript(cube1_script));
 
 	//Dynamite
-	Entity* dynamite_ent = CreateEntity3DWithMesh(glm::vec3(25, 0, 25), 0.3, glm::vec3(0, 0, 0), "Meshes/dynamite.obj", "Textures/dynamite_basecolor.png");
+	Entity* dynamite_ent = CreateEntity3DWithMesh(glm::vec3(80, 2, 45), 0.3, glm::vec3(0, 0, 0), "Meshes/dynamite.obj", "Textures/dynamite_basecolor.png");
 	dynamite_ent->assign<CubeCollider>(2, 2, 2);
 	dynamite_ent->assign<Tag>(Tag{ EntityType::mobile });
 
@@ -246,7 +246,7 @@ int main() {
 	AudioPlayer::Init();
 
 	//AudioPlayer::PlayAudio("./Audio/industrious_ferret.wav", false);
-
+	AudioPlayer::PlayAudio("timebomb_loop.wav", true);
 	//Program core loop
 	while (!glfwWindowShouldClose(window)) {
 

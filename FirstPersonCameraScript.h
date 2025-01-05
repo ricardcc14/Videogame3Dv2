@@ -35,7 +35,7 @@ private:
     float holdingZoom = 10.0f;
     LightScript* lightScript;
     MazeSpawnerScript* mazeScript;
-    
+    glm::vec3 initialPos = glm::vec3(10.0f, 6.f, 10.0f);
   
     //TimerScript timerScript;
     

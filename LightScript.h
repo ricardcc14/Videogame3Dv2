@@ -14,6 +14,8 @@ public:
     void tickScript(float deltaTime) override;
 
     void openLight();
+    float accTime = 0.f;
+    float brightness = 1.f;
     
 private:
   

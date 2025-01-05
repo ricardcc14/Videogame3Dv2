@@ -101,33 +101,7 @@ void MazeSpawnerScript::startScript()
 	};
 	
 	vector<string> map5 = concatMaps(spawn, lab_map5, objective);
-	/*
-		vector<string> map1 = {
-		"#########################",
-		"#-----------------------#",
-		"#-----------------------#",
-		"#-----------------------#",
-		"#-----------------------#",
-		"#-----------------------#",
-		"#-----------------------#",
-		"#-#######-#############-#",
-		"#-#-----#-#-----------#-#",
-		"#-#-###-#-#-#######-###-#",
-		"#-#---#-#-#-------#---#-#",
-		"#-###-#-#-#######-#-###-#",
-		"#---#-#-#-------#-#-----#",
-		"#-###-###########-#######",
-		"#-#---------------------#",
-		"#-###-###########-#####-#",
-		"#-----#---------#-------#",
-		"#-#######-#####-#######-#",
-		"#-----------------------#",
-		"#-----------------------#",
-		"#-----------------------#",
-		"#-----------------------#",
-		"#########################"
-	}
-	*/
+
 	mazeMaps.push_back(map1);
 	mazeMaps.push_back(map2);
 	mazeMaps.push_back(map3);
@@ -140,13 +114,12 @@ void MazeSpawnerScript::tickScript(float deltaTime)
 	startScript();
 	t += deltaTime;
 
-	/*
+	
 	if (t > delay) {
 		cout << "spawn" << endl;
 		t = 0;
-	*/
+	}
 }
-
 vector<string> MazeSpawnerScript::concatMaps(vector<string> spawn, vector<string> map, vector<string> objective) {
 	vector<string> concatMap = spawn;
 	concatMap.insert(concatMap.end(), map.begin(), map.end());
