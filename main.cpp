@@ -189,7 +189,7 @@ void SetupWorld() {
 	//Dynamite
 	Entity* dynamite_ent = CreateEntity3DWithMesh(glm::vec3(80, 2, 45), 0.3, glm::vec3(0, 0, 0), "Meshes/dynamite.obj", "Textures/dynamite_basecolor.png");
 	dynamite_ent->assign<CubeCollider>(2, 2, 2);
-	dynamite_ent->assign<Tag>(Tag{ EntityType::mobile });
+	dynamite_ent->assign<Tag>(Tag{ EntityType::dynamite });
 
 
 

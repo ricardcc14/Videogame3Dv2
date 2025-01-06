@@ -197,7 +197,7 @@ void FirstPersonCameraScript::tickScript(float deltaTime) {
 					if (cube_tag && cube_tag->type == EntityType::fixed) {
 						return;
 					}
-					if (cube_tag->type == EntityType::mobile || cube_tag->type == EntityType::light) {
+					if (cube_tag->type == EntityType::mobile || cube_tag->type == EntityType::light || cube_tag->type == EntityType::dynamite) {
 						ComponentHandle<Transform3D> cube_transform = cube_ent->get<Transform3D>();
 
 						glm::vec3 cubeMinPos = cube_transform->position - glm::vec3(cube_collider->width, cube_collider->length, cube_collider->height) * 0.5f;
@@ -207,7 +207,7 @@ void FirstPersonCameraScript::tickScript(float deltaTime) {
 						if (rayPoint.x >= cubeMinPos.x && rayPoint.x <= cubeMaxPos.x &&
 							rayPoint.y >= cubeMinPos.y && rayPoint.y <= cubeMaxPos.y &&
 							rayPoint.z >= cubeMinPos.z && rayPoint.z <= cubeMaxPos.z) {
-							if (cube_tag->type == EntityType::mobile) {
+							if (cube_tag->type == EntityType::dynamite) {
 
 							holdingObj = true;
 							objHolded = cube_ent;
@@ -217,6 +217,9 @@ void FirstPersonCameraScript::tickScript(float deltaTime) {
 								lightScript->openLight();
 								mazeScript->changeMaze();
 								//cout << "Br" << endl;
+							}
+							if (cube_tag->type == EntityType::mobile) {
+								//Implement features with blocks
 							}
 							return;
 						}
@@ -307,6 +310,12 @@ void FirstPersonCameraScript::tickScript(float deltaTime) {
 	if (lightScript->brightness == 0.01f && currentPosition.x > 25.5 && currentPosition.x < 71) {
 		cam->position = initialPos;
 		lightScript->openLight();
+		if (holdingObj) {
+			ComponentHandle<Transform3D> holded_transform = objHolded->get<Transform3D>();
+			holded_transform->position = glm::vec3(80, 2, 45); //restart position of the dynamite
+			objHolded = nullptr;
+			holdingObj = false;
+		}
 	}
 	if (currentPosition.x > 71) {
 		lightScript->openLight();

@@ -25,7 +25,7 @@ public:
 
 private:
     
-    float currentTime = 300.f;
+    float currentTime = 180.f;
     float tickRate = 1.f;
     float timeAccumulated = 0.f;
     Entity* digitEntities[4];

@@ -128,7 +128,8 @@ struct ScriptComponent
 enum class EntityType {
     mobile,
     fixed,
-    light
+    light,
+    dynamite
 };
 struct Tag {
     EntityType type;
